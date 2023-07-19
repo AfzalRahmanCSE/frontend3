@@ -9,8 +9,8 @@ const UserItem=({user})=>{
         }}>
   <img src={user.avatar_url} className="rounded-circle" alt="..."
   style={{
-    width: '100px', // Set the desired width of the image
-    height: '100px',
+    width: '150px', // Set the desired width of the image
+    height: '150px',
   }}
   />
   <div className="card-body">
