@@ -11,13 +11,15 @@ const ProductList = () => {
     const [limit, setLimit] = useState(10)
     const [search,setSearch]=useState('')
     const [filter,setFilter]=useState('')
+    const [sortValue,setSortValue]=useState('')
+    const [sortDir,setSortDir]=useState('')
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/products/page/${page}/limit/${limit}?search=${filter}`)
+        axios.get(`http://localhost:5000/api/products/page/${page}/limit/${limit}?search=${filter}&sort=${sortValue}&direction=${sortDir}`)
             .then(res => {
                 setResponse(res.data); setError(false); setLoader(false)
             })
             .catch(err => { console.log(err); setError(true); setLoader(false) })
-    }, [page, limit,filter])
+    }, [page, limit,filter,sortValue,sortDir])
     const onPrev = () => {
         if (page > 1) {
             setPage(page - 1)
@@ -41,6 +43,13 @@ const ProductList = () => {
         setFilter(search)
     }
 
+    const onSortChange=(evt)=>{
+        const sortedValue=evt.target.value;
+        const token=sortedValue.split(':')
+        setSortValue(token[0])
+        setSortDir(token[1])
+    }
+
 
     return <div>
         <h1 style={{ textAlign: 'center' }}>Product List</h1>
@@ -48,7 +57,7 @@ const ProductList = () => {
             <button className="btn btn-sm btn-outline-secondary col-1" disabled={page === 1} onClick={onPrev}>
                 <i className="fa-solid fa-chevron-left"></i></button>
 
-            <span className="col-2">Page {page} of {response.metadata.pages}</span>
+            <span className="col-2" style={{textAlign:'center'}}>Page {page} of {response.metadata.pages}</span>
 
             <button className="btn btn-sm btn-outline-secondary col-1" disabled={page === response.metadata.pages} onClick={onNext}>
                 <i className="fa-solid fa-chevron-right"></i></button>
@@ -69,8 +78,16 @@ const ProductList = () => {
                     </button>
                 </div>
             </div>
-
-            <Link to='/newproduct' className='btn btn-danger btn-sm col-2 m-2'>New Product</Link>
+            <div className="col-2">
+                <select className="form-select" onChange={onSortChange}>
+                    <option value="">Sort By</option>
+                    <option value="brand:asc">Brand Ascending</option>
+                    <option value="brand:desc">Brand Descending</option>
+                    <option value="price:asc">Price Low to High</option>
+                    <option value="price:desc">Price high to Low</option>
+                </select>
+            </div>
+            <Link to='/newproduct' className='btn btn-danger btn-sm col-2' style={{textTransform:'uppercase'}}>Add New Product</Link>
         </div>
         <hr />
         <div className="container">
