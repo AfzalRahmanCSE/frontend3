@@ -11,7 +11,6 @@ const ProductList = () => {
     const [limit, setLimit] = useState(10)
     const [search,setSearch]=useState('')
     const [filter,setFilter]=useState('')
-    
     useEffect(() => {
         axios.get(`http://localhost:5000/api/products/page/${page}/limit/${limit}?search=${filter}`)
             .then(res => {
